@@ -11,6 +11,9 @@ command_exists() {
     command -v "$1" >/dev/null 2>&1
 }
 
+command_exists python3 && notify "python3 found" "nice" || notify "python3 NOT found" "not nice"
+
+
 # Install Python3 if missing
 if ! command_exists python3; then
     echo "Installing Python3 via Homebrew..."
