@@ -11,12 +11,13 @@ command_exists() {
     command -v "$1" >/dev/null 2>&1
 }
 
-command_exists python3 && notify "python3 found" "nice" || notify "python3 NOT found" "not nice"
-
-
+notify "MacStats Setup" "This script will set up MacStats for you."
+sleep 2
+notify "Checking requirements..." "Please wait while we check your system."
 # Install Python3 if missing
 if ! command_exists python3; then
-    echo "Installing Python3 via Homebrew..."
+
+    notify "Python3 Installation" "Python3 is not installed. Installing now..."
     # Install Homebrew if not installed (completely non-interactive)
     if ! command_exists brew; then
         notify "Homebrew Installation" "Please install Homebrew to continue."
@@ -29,10 +30,10 @@ fi
 
 # Check pip3
 if ! command_exists pip3; then
-    echo "pip3 missing, installing via ensurepip..."
+    notify "pip3 Installation" "pip3 is not installed. Installing now..."
     python3 -m ensurepip --upgrade || {
-        echo "Failed to install pip3, exiting."
-        exit 1
+        notify "pip3 Installation Failed" "Failed to install pip3. Please install it manually."
+        exit 0
     }
 else
     echo "pip3 already installed."
@@ -51,6 +52,8 @@ templates=(
     "storage.html"
 )
 
+notify "Cleaning up..." "Removing existing files and templates."
+
 # Remove existing files
 for file in "${files[@]}"; do
     if [ -f "$file" ]; then
@@ -67,6 +70,8 @@ for template in "${templates[@]}"; do
     fi
 done
 
+notify "Downloading files..." "Please wait while we download the necessary files."
+
 # Download files
 for file in "${files[@]}"; do
     echo "Downloading $file..."
@@ -79,6 +84,8 @@ for template in "${templates[@]}"; do
     mkdir -p "$(dirname "${templateextension}${template}")"
     curl -s -o "${templateextension}${template}" "${baseurl}${templateextension}${template}"
 done
+
+notify "Running MacStats now..." "Setting up the virtual environment and installing dependencies."
 
 # Run your run.sh script
 bash run.sh
