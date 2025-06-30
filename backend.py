@@ -68,6 +68,7 @@ def get_categorized_storage_stats():
         user_home = os.path.expanduser(f"~{username}")
 
         apps_bytes = get_directory_size("/Applications")
+        download_bytes = get_directory_size("/Users", username, "Downloads")
         documents_bytes = get_directory_size(os.path.join(user_home, "Documents"))
         photos_bytes = get_directory_size(os.path.join(user_home, "Pictures"))
 
@@ -87,6 +88,7 @@ def get_categorized_storage_stats():
 
         categorized_data = {
             "Apps": apps_bytes,
+            "Downloads" : download_bytes,
             "Documents": documents_bytes,
             "Photos": photos_bytes,
             "iCloud": icloud_bytes,
