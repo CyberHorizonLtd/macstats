@@ -5,6 +5,7 @@ files=(
     "requirements.txt"
     "run.sh"
 )
+mkdir "templates/pages" 2>/dev/null
 
 for file in "${files[@]}"; do
     echo "Downloading $file..."
