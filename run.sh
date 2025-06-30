@@ -1,5 +1,10 @@
 #!/bin/bash
 
+notify() {
+  # usage: notify "Title" "Message"
+  osascript -e "display notification \"$2\" with title \"$1\""
+}
+
 rm -rf .venv
 python3 -m venv .venv
 source .venv/bin/activate
@@ -13,7 +18,20 @@ BACKEND_PID=$!
 # Launch Safari with the URL, get its PID
 # delay 3 sesconds
 sleep 3
+
+notify "MacStats" "Opening the MacStats storage page in Safari."
+
+sleep 1
+
 open -a Safari http://127.0.0.1:4637/storage
+
+sleep 1
+
+notify "MacStats" "Refresh the page if it doesn't load immediately."
+
+sleep 3
+
+notify "MacStats" "To stop the backend, close the browser tab."
 
 # Find the Safari process running the page (wait until the tab is closed)
 # We'll poll Safari until it no longer has that tab open.
