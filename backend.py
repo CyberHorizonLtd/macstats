@@ -71,13 +71,16 @@ def get_categorized_storage_stats():
         documents_bytes = get_directory_size(os.path.join(user_home, "Documents"))
         photos_bytes = get_directory_size(os.path.join(user_home, "Pictures"))
 
+        # New iCloud category
+        icloud_bytes = get_directory_size(os.path.join(user_home, "Library", "Mobile Documents"))
+
         system_data_bytes = (
             get_directory_size("/System") +
             get_directory_size("/Library") +
             get_directory_size("/private")
         )
 
-        categorized_sum = apps_bytes + documents_bytes + photos_bytes + system_data_bytes
+        categorized_sum = apps_bytes + documents_bytes + photos_bytes + system_data_bytes + icloud_bytes
         other_bytes = used_bytes - categorized_sum
         if other_bytes < 0:
             other_bytes = 0
@@ -86,6 +89,7 @@ def get_categorized_storage_stats():
             "Apps": apps_bytes,
             "Documents": documents_bytes,
             "Photos": photos_bytes,
+            "iCloud": icloud_bytes,
             "System Data": system_data_bytes,
             "Other": other_bytes
         }
@@ -98,6 +102,7 @@ def get_categorized_storage_stats():
             "error": "Failed to compute categorized usage.",
             "details": str(e)
         }), 500
+
 
 if __name__ == '__main__':
     # Run the Flask app on localhost:4637
