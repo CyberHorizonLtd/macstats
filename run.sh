@@ -11,6 +11,8 @@ BACKEND_PID=$!
 
 # Open the default browser with the URL (e.g., Safari)
 # Launch Safari with the URL, get its PID
+# delay 3 sesconds
+sleep 3
 open -a Safari http://127.0.0.1:4637/storage
 
 # Find the Safari process running the page (wait until the tab is closed)
