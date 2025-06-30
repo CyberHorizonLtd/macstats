@@ -5,6 +5,8 @@ import platform # To detect the operating system
 import os # To check if a path exists
 import subprocess
 import getpass
+#error trace
+import traceback
 
 app = Flask(__name__)
 CORS(app) # Enable CORS for all routes
@@ -60,7 +62,7 @@ def get_basic_storage_stats():
 
 @app.route('/storage_stats/categorized', methods=['GET'])
 def get_categorized_storage_stats():
-    path_to_check, volume_label = get_disk_usage_path()
+    path_to_check, _ = get_disk_usage_path() #volume_label is not needed for categorized stats
     if not path_to_check:
         return jsonify({"error": "This endpoint only supports macOS."}), 400
 
@@ -109,7 +111,8 @@ def get_categorized_storage_stats():
     except Exception as e:
         return jsonify({
             "error": "Failed to compute categorized usage.",
-            "details": str(e)
+            "details": str(e),
+            "trace": traceback.format_exc()
         }), 500
 
 
