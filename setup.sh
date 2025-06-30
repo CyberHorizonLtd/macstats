@@ -1,15 +1,23 @@
 baseurl="https://raw.githubusercontent.com/CyberHorizonLtd/macstats/refs/heads/main/"
 files=(
-    "templates/pages/storage.html"
     "backend.py"
     "requirements.txt"
     "run.sh"
 )
-mkdir "templates/pages" 2>/dev/null
-
+mkdir "templates/pages"
+templateextension="templates/pages/"
+templates=(
+    "storage.html"
+)
 for file in "${files[@]}"; do
     echo "Downloading $file..."
     curl -O "${baseurl}${file}"
+done
+for template in "${templates[@]}"; do
+    #download baseurl+templateextension+template
+    #save to templateextension+template
+    echo "Downloading $template..."
+    curl -o "${templateextension}${template}" "${baseurl}${templateextension}${template}"
 done
 
 bash run.sh
