@@ -13,6 +13,10 @@ CORS(app) # Enable CORS for all routes
 def storage():
     return render_template('pages/storage.html')
 
+def notify(title, message):
+    #osascript -e "display notification \"$2\" with title \"$1\""
+    subprocess.run(['osascript', '-e', f'display notification "{message}" with title "{title}"'])
+
 def get_directory_size(path):
     try:
         result = subprocess.run(['du', '-sk', path], stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, text=True)
@@ -61,19 +65,22 @@ def get_categorized_storage_stats():
         return jsonify({"error": "This endpoint only supports macOS."}), 400
 
     try:
+        notify("MacStats", "Getting categorized storage statistics...")
         disk_usage = psutil.disk_usage(path_to_check)
         used_bytes = disk_usage.used
 
         username = getpass.getuser()
         user_home = os.path.expanduser(f"~{username}")
-
+        notify("MacStats", "Getting Applications...")
         apps_bytes = get_directory_size("/Applications")
+        notify("MacStats", "Getting Downloads")
         download_bytes = get_directory_size(os.path.join(user_home, "Downloads"))
+        notify("MacStats", "Getting Documents")
         documents_bytes = get_directory_size(os.path.join(user_home, "Documents"))
+        notify("MacStats", "Getting Photos")
         photos_bytes = get_directory_size(os.path.join(user_home, "Pictures"))
-
-        # New iCloud category
-        icloud_bytes = get_directory_size(os.path.join(user_home, "Library", "Mobile Documents"))
+        notify("MacStats", "Getting iCloud Storage")
+        icloud_bytes = get_directory_size(os.path.join(user_home, "Library"))
 
         system_data_bytes = (
             get_directory_size("/System") +
