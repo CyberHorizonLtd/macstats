@@ -13,7 +13,7 @@ command_exists() {
 
 # Install Homebrew if not installed (completely non-interactive)
 if ! command_exists brew; then
-    notify "Homebrew Installation" "Homebrew is not installed, installing now..."
+    #notify "Homebrew Installation" "Homebrew is not installed, installing now..."
     NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
     # Add Homebrew to PATH for this shell session
