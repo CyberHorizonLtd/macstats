@@ -14,7 +14,7 @@ command_exists() {
 # Install Homebrew if not installed (completely non-interactive)
 if ! command_exists brew; then
     notify "Homebrew Installation" "Please install Homebrew to continue."
-    exit 1
+    exit 0
 fi
 
 # Install Python3 if missing
