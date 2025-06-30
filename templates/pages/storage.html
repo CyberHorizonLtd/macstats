@@ -112,12 +112,6 @@
 
             <!-- Categories will be dynamically inserted here -->
         </div>
-
-        <div class="flex justify-center">
-            <button id="refreshButton" class="refresh-button focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
-                Refresh Data
-            </button>
-        </div>
     </div>
 
     <div id="messageBox" class="message-box"></div>
@@ -211,10 +205,6 @@ async function updateDetailedStats() {
     window.onload = function() {
     updateBasicStats();          // Fast load
     updateDetailedStats();       // Async
-    document.getElementById('refreshButton').addEventListener('click', () => {
-        updateBasicStats();
-        updateDetailedStats();
-    });
 };
 
 </script>
