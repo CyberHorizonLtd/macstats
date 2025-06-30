@@ -21,6 +21,8 @@ if ! command_exists python3; then
     # Install Homebrew if not installed (completely non-interactive)
     if ! command_exists brew; then
         notify "Homebrew Installation" "Please install Homebrew to continue."
+        # open homebrew installation page
+        open "https://brew.sh/"
         exit 0
     fi
     brew install python
