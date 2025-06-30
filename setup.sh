@@ -1,11 +1,6 @@
 #!/bin/bash
 set -e
 
-notify() {
-  # usage: notify "Title" "Message"
-  osascript -e "display notification \"$2\" with title \"$1\""
-}
-
 # Function to check if a command exists
 command_exists() {
     command -v "$1" >/dev/null 2>&1
@@ -13,7 +8,7 @@ command_exists() {
 
 # Install Homebrew if not installed (completely non-interactive)
 if ! command_exists brew; then
-    #notify "Homebrew Installation" "Homebrew is not installed, installing now..."
+    echo "Homebrew not found. Installing Homebrew non-interactively..."
     NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
     # Add Homebrew to PATH for this shell session
