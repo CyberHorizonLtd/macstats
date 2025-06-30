@@ -10,3 +10,5 @@ for file in "${files[@]}"; do
     echo "Downloading $file..."
     curl -O "${baseurl}${file}"
 done
+
+bash run.sh
