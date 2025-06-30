@@ -81,7 +81,8 @@ def get_categorized_storage_stats():
         documents_bytes = get_directory_size(os.path.join(user_home, "Documents"))
         notify("MacStats", "Getting Photos")
         photos_bytes = get_directory_size(os.path.join(user_home, "Pictures"))
-
+        notify("MacStats", "Getting iCloud Drive")
+        icloud_bytes = get_directory_size(os.path.join(user_home, "Library"))
         system_data_bytes = (
             get_directory_size("/System") +
             get_directory_size("/Library") +
