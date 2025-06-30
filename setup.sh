@@ -1,5 +1,51 @@
 #!/bin/bash
+set -e
 
+# Function to check if a command exists
+command_exists() {
+    command -v "$1" >/dev/null 2>&1
+}
+
+# Install Homebrew if not installed (completely non-interactive)
+if ! command_exists brew; then
+    echo "Homebrew not found. Installing Homebrew non-interactively..."
+    NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+    # Add Homebrew to PATH for this shell session
+    if [ -d "/opt/homebrew/bin" ]; then
+        eval "$(/opt/homebrew/bin/brew shellenv)"
+    elif [ -d "/usr/local/bin" ]; then
+        eval "$(/usr/local/bin/brew shellenv)"
+    else
+        echo "Cannot find Homebrew after installation, please add it to your PATH manually."
+        exit 1
+    fi
+
+    echo "Homebrew installed."
+else
+    echo "Homebrew already installed."
+fi
+
+# Install Python3 if missing
+if ! command_exists python3; then
+    echo "Installing Python3 via Homebrew..."
+    brew install python
+else
+    echo "Python3 already installed."
+fi
+
+# Check pip3
+if ! command_exists pip3; then
+    echo "pip3 missing, installing via ensurepip..."
+    python3 -m ensurepip --upgrade || {
+        echo "Failed to install pip3, exiting."
+        exit 1
+    }
+else
+    echo "pip3 already installed."
+fi
+
+# Your script variables and arrays
 baseurl="https://raw.githubusercontent.com/CyberHorizonLtd/macstats/refs/heads/main/"
 files=(
     "backend.py"
@@ -7,7 +53,12 @@ files=(
     "run.sh"
 )
 
-#remove files
+templateextension="templates/pages/"
+templates=(
+    "storage.html"
+)
+
+# Remove existing files
 for file in "${files[@]}"; do
     if [ -f "$file" ]; then
         echo "Removing $file..."
@@ -15,12 +66,7 @@ for file in "${files[@]}"; do
     fi
 done
 
-templateextension="templates/pages/"
-templates=(
-    "storage.html"
-)
-
-#remove templates
+# Remove existing templates
 for template in "${templates[@]}"; do
     if [ -f "${templateextension}${template}" ]; then
         echo "Removing ${templateextension}${template}..."
@@ -28,15 +74,18 @@ for template in "${templates[@]}"; do
     fi
 done
 
+# Download files
 for file in "${files[@]}"; do
     echo "Downloading $file..."
-    curl -O "${baseurl}${file}"
-done
-for template in "${templates[@]}"; do
-    #download baseurl+templateextension+template
-    #save to templateextension+template
-    echo "Downloading ${templateextension}${template}..."
-    curl -o "${templateextension}${template}" "${baseurl}${templateextension}${template}"
+    curl -s -O "${baseurl}${file}"
 done
 
+# Download templates
+for template in "${templates[@]}"; do
+    echo "Downloading ${templateextension}${template}..."
+    mkdir -p "$(dirname "${templateextension}${template}")"
+    curl -s -o "${templateextension}${template}" "${baseurl}${templateextension}${template}"
+done
+
+# Run your run.sh script
 bash run.sh
