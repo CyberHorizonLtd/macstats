@@ -11,15 +11,14 @@ command_exists() {
     command -v "$1" >/dev/null 2>&1
 }
 
-# Install Homebrew if not installed (completely non-interactive)
-if ! command_exists brew; then
-    notify "Homebrew Installation" "Please install Homebrew to continue."
-    exit 0
-fi
-
 # Install Python3 if missing
 if ! command_exists python3; then
     echo "Installing Python3 via Homebrew..."
+    # Install Homebrew if not installed (completely non-interactive)
+    if ! command_exists brew; then
+        notify "Homebrew Installation" "Please install Homebrew to continue."
+        exit 0
+    fi
     brew install python
 else
     echo "Python3 already installed."
